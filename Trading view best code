@@ -1,0 +1,33 @@
+//@version=5
+indicator("Custom Indicator", overlay=true, max_bars_back=250)
+
+// Condition 1: Close price is at least 20% higher than the close price from 5 days ago.
+close5DaysAgo = close[5]
+cond1 = close / close5DaysAgo >= 1.2
+
+// Condition 2: At least 3 out of the last 5 days had a volume of 100,000 or more.
+volCond = array.new_bool(5, false) // Initializing the array with default values
+if (array.size(volCond) == 5)
+    array.shift(volCond)
+array.push(volCond, volume >= 100000)
+volCount = 0
+for i = 0 to array.size(volCond) - 1
+    if array.get(volCond, i)
+        volCount := volCount + 1
+cond2 = volCount >= 3
+
+// Condition 3: Close price is greater than or equal to 10.
+cond3 = close >= 10
+
+// Combining all conditions
+allConditionsMet = cond1 and cond2 and cond3
+
+// Plotting the area
+plot(allConditionsMet ? close : na, color=color.new(color.green, 90), style=plot.style_area, title="Indicator Area")
+
+// Plot conditions separately for debugging
+plotshape(cond1, location=location.bottom, color=color.blue, style=shape.labelup, size=size.small, title="Cond1 Met")
+
+
+// Alerts
+alertcondition(allConditionsMet, title="Conditions Met", message="All conditions have been met.")
