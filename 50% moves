@@ -1,7 +1,7 @@
 //@version=5
 indicator("Custom Indicator", overlay=true, max_bars_back=504)
 
-// Condition 1: Close price is at least 20% higher than the close price from 5 days ago.
+// Condition 1: Close price is at least 50% higher than the close price from 40 days ago.
 close40DaysAgo = close[40]
 cond1 = close / close40DaysAgo >= 1.5
 
@@ -26,6 +26,6 @@ allConditionsMet = cond1 and cond2 and cond3
 plot(allConditionsMet ? close : na, color=color.new(color.green, 90), style=plot.style_area, title="Indicator Area")
 
 // Plot conditions separately for debugging
-plotshape(cond1, location=location.bottom, color=color.blue, style=shape.labelup, size=size.small, title="Cond1 Met")
+plotshape(cond1, location=location.bottom, color=color.blue, style=shape.labelup, size=size.small, title="50% up")
 
 
